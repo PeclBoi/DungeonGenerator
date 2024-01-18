@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a5fc61fdf04bb60428b49b40c31a2ec4, type: 3}
+  m_Name: Middle Part
+  m_EditorClassIdentifier: 
+  Tile: {fileID: 2417688711732327561, guid: 77efd3fb17f5bae43b068a259c24d3d1, type: 3}
+  AdjacentTiles:
+  - tile: {fileID: 11400000, guid: b1e04f69ed783c64c9d123e7da8ee593, type: 2}
+    AdjacentPos: 128
+  - tile: {fileID: 11400000, guid: ba67bcc35dc5fe546b27fd28174363bf, type: 2}
+    AdjacentPos: 8
+  - tile: {fileID: 11400000}
+    AdjacentPos: 136
+  IsTileLoaded: 0
+  gridPos: {x: 0, y: 0}
+  TilePos: {x: 0, y: 0, z: 0}

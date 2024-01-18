@@ -1,0 +1,55 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &8156706527724027274
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3241954748503427709}
+  - component: {fileID: 2894172904040183694}
+  m_Layer: 0
+  m_Name: Cell
+  m_TagString: Untagged
+  m_Icon: {fileID: -5938655980376293919, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3241954748503427709
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8156706527724027274}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2894172904040183694
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8156706527724027274}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eda24de294fd24e479ed3d8781901b0f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  collapsed: 0
+  tileOptions:
+  - {fileID: 750745503198533089, guid: 3f5437b29a2825142ba0d52ec161b770, type: 3}
+  - {fileID: 750745503198533089, guid: e0da744e816c4eb4e80113effa876861, type: 3}
+  - {fileID: -8551679149094063604, guid: 56c4b613855858e4389ca7ae58e55598, type: 3}
+  - {fileID: -4301752131682289563, guid: 9b7ac6492cb30094ca68045b89502aef, type: 3}
+  - {fileID: -4301752131682289563, guid: 77efd3fb17f5bae43b068a259c24d3d1, type: 3}
+  - {fileID: 750745503198533089, guid: c95b33fa855dcac47bfe9356bccffa0d, type: 3}
+  - {fileID: 750745503198533089, guid: fa9eeb4f3163594499b3a24431342f7c, type: 3}
