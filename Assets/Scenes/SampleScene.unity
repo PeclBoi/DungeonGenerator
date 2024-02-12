@@ -153,6 +153,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dimensions: 25
+  numberOfSegments: 3
   block: {fileID: 4064085906160412314, guid: 3f5437b29a2825142ba0d52ec161b770, type: 3}
   redBlock: {fileID: 4064085906160412314, guid: 79a448deecea55c43a30eb355823784e, type: 3}
   blueBlock: {fileID: 4064085906160412314, guid: cfbb417456c942041a824d5676544288, type: 3}
@@ -350,8 +351,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.001811035, y: 0.008097576, z: 0.0000013141835, w: -0.9999656}
-  m_LocalPosition: {x: 9.375088, y: 9.5017395, z: -20.491688}
+  m_LocalRotation: {x: -6.425696e-18, y: -0.000000073574476, z: -0, w: 1}
+  m_LocalPosition: {x: 12.264549, y: 11.8055935, z: -32.027058}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

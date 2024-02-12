@@ -1,8 +1,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
 using System.Linq;
+using Unity.VisualScripting;
+using UnityEditor.PackageManager;
 using UnityEngine;
 
 
@@ -10,10 +11,10 @@ public class Rectangle
 {
     public int Width { get; }
     public int Heigth { get; }
-    public Vector2 OriginCorner { get; }
+    public Point OriginCorner { get; }
     public List<Line> Lines { get; private set; } = new List<Line>();
 
-    public Rectangle(int width, int heigth, Vector2 originCorner)
+    public Rectangle(int width, int heigth, Point originCorner)
     {
         Width = width;
         Heigth = heigth;
@@ -25,9 +26,11 @@ public class Rectangle
 
     private void DetermineLines()
     {
-        Vector2 point2 = new Vector2(OriginCorner.x, OriginCorner.y + Heigth);
-        Vector2 point3 = new Vector2(OriginCorner.x + Width, OriginCorner.y + Heigth);
-        Vector2 point4 = new Vector2(OriginCorner.x + Width, OriginCorner.y);
+        Mathf.Clamp(OriginCorner.y + Heigth, 0, 25);
+
+        var point2 = new Point(OriginCorner.x, Mathf.Clamp(OriginCorner.y + Heigth, 0, 25));
+        var point3 = new Point(Mathf.Clamp(OriginCorner.x + Width, 0, 25), Mathf.Clamp(OriginCorner.y + Heigth, 0, 25));
+        var point4 = new Point(Mathf.Clamp(OriginCorner.x + Width, 0, 25), OriginCorner.y);
 
         Lines.Add(new Line(OriginCorner, point2));
         Lines.Add(new Line(point2, point3));
@@ -39,34 +42,19 @@ public class Rectangle
 
 public class Line
 {
-    public Vector2 PointA { get; }
-    public Vector2 PointB { get; }
+    public Point PointA { get; }
+    public Point PointB { get; }
 
 
-    public bool IsParallelTo(Line other)
-    {
-        var vector = PointB - PointA;
-        var otherVector = other.PointB - other.PointA;
+    //public bool Contains(Vector2 point)
+    //{
+    //    return point == PointA || point == PointB;
+    //}
 
-
-        return vector.x * otherVector.y - vector.y * otherVector.x == 0;
-
-    }
-
-    public bool Contains(Vector2 point)
-    {
-        return point == PointA || point == PointB;
-    }
-
-    public Line(Vector2 pointA, Vector2 pointB)
+    public Line(Point pointA, Point pointB)
     {
         PointA = pointA;
         PointB = pointB;
-    }
-
-    public bool Equals(Line other)
-    {
-        return Contains(other.PointA) && Contains(other.PointB);
     }
 
     public bool IsHorizonal
@@ -84,69 +72,65 @@ public class Line
             return PointA.x == PointB.x;
         }
     }
-
-    public bool IsIntersecting(Line line)
-    {
-
-        if (line == this)
-        {
-            return false;
-        }
-
-        if (line.PointA.y == PointA.y && line.PointB.y == PointB.y && line.PointA.y == line.PointB.y)
-        {
-
-            float minX = Mathf.Min(line.PointA.x, line.PointB.x);
-            float lineTableEntryMinX = Mathf.Min(PointA.x, PointB.x);
-
-            float maxX = Mathf.Max(line.PointA.x, line.PointB.x);
-            float lineTableEntryMaxX = Mathf.Max(PointA.x, PointB.x);
-
-            if (minX >= lineTableEntryMinX && maxX <= lineTableEntryMaxX)
-            {
-                return true;
-            }
-        }
-
-
-        if (line.PointA.x == PointA.x && line.PointB.x == PointB.x && line.PointA.x == line.PointB.x)
-        {
-
-            float minY = Mathf.Min(line.PointA.y, line.PointB.y);
-            float lineTableEntryMinY = Mathf.Min(PointA.y, PointB.y);
-
-            float maxY = Mathf.Max(line.PointA.y, line.PointB.y);
-            float lineTableEntryMaxY = Mathf.Max(PointA.y, PointB.y);
-
-            if (minY >= lineTableEntryMinY && maxY <= lineTableEntryMaxY)
-            {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    public int CompareTo(Line other)
-    {
-        if (other.PointA == PointA && other.PointB == PointB)
-        {
-            return 0;
-        }
-        else return 1;
-    }
 }
 
-public class OverlappingLinePair
+public class Point
 {
-    public Line line1 { get; set; }
-    public Line line2 { get; set; }
+
+    public int x;
+    public int y;
+
+    public Point(int x, int y)
+    {
+        this.x = x;
+        this.y = y;
+    }
+
+    public Point(float x, float y)
+    {
+        this.x = (int)x;
+        this.y = (int)y;
+    }
+
+    public Point(Vector2 vector)
+    {
+        x = (int)vector.x;
+        y = (int)vector.y;
+    }
+
+    public bool TryGetNextPointUp(List<Point> points, out Point nextPoint)
+    {
+        nextPoint = points.Where(p => p.x == x && p.y > y).OrderBy(p => p.y).FirstOrDefault();
+
+        return nextPoint != null;
+    }
+
+    public bool TryGetNextPointDown(List<Point> points, out Point nextPoint)
+    {
+        nextPoint = points.Where(p => p.x == x && p.y < y).OrderByDescending(p => p.y).FirstOrDefault();
+        return nextPoint != null;
+    }
+
+    public bool TryGetNextPointRight(List<Point> points, out Point nextPoint)
+    {
+        nextPoint = points.Where(p => p.y == y && p.x > x).OrderBy(p => p.x).FirstOrDefault();
+        return nextPoint != null;
+    }
+
+    public bool TryGetNextPointLeft(List<Point> points, out Point nextPoint)
+    {
+        nextPoint = points.Where(p => p.y == y && p.x < x).OrderByDescending(p => p.x).FirstOrDefault();
+        return nextPoint != null;
+    }
+
 }
+
 
 public class RoomGenerator : MonoBehaviour
 {
 
     public int dimensions;
+    public int numberOfSegments;
 
     public GameObject block;
     public GameObject redBlock;
@@ -154,6 +138,7 @@ public class RoomGenerator : MonoBehaviour
 
     GameObject[] grid;
 
+    int layer = 0;
     void Start()
     {
 
@@ -166,226 +151,411 @@ public class RoomGenerator : MonoBehaviour
                 grid[x + y * dimensions] = Instantiate(block, new Vector2(x, y), Quaternion.identity);
             }
         }
+    }
 
-        List<Line> lineTable = new();
-
-        var roomPart1 = new Rectangle(15, 6, new Vector2(4, 4));
-        var roomPart3 = new Rectangle(7, 7, new Vector2(10, 6));
-        var roomPart2 = new Rectangle(4, 6, new Vector2(10, 10));
-
-        lineTable.AddRange(roomPart1.Lines);
-        lineTable.AddRange(roomPart3.Lines);
-        lineTable.AddRange(roomPart2.Lines);
-
-        List<Vector2> crossPoints;
-        lineTable = GetCrossingLines(lineTable, out crossPoints);
-
-        EliminateInnerPoints(lineTable);
-
-        SimplifyForm(lineTable);
-
-        RemoveDuplicates(lineTable);
-
-        List<Line> linesToAdd = new();
-        List<Line> linesToRemove = new();
-        foreach (var line in lineTable)
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
         {
-            List<Vector2> points = new();
+            List<Point> points = new();
+            List<Line> lineTable = new();
+            int roomMinSize = 4;
 
-            var parallelLines = lineTable.Where(l => l.IsParallelTo(line));
-
-            if(linesToRemove.Any(l => l.Equals(line))) { continue; }
-
-            if (line.IsHorizonal)
+            for (int i = 0; i < numberOfSegments; i++)
             {
-                var overlappingLines = parallelLines.Where(l => l.PointA.y == line.PointA.y).ToList();
-                if (overlappingLines.Count > 1)
+                var x = UnityEngine.Random.Range(0, dimensions - roomMinSize - 1);
+                var y = UnityEngine.Random.Range(0, dimensions - roomMinSize - 1);
+
+                var origin = new Point(x, y);
+                int width = UnityEngine.Random.Range(roomMinSize, dimensions - x);
+                int height = UnityEngine.Random.Range(roomMinSize, dimensions - y);
+
+                Debug.Log("centre: " + origin.x + "|" + origin.y);
+                Debug.Log("heigt: " + height + " width: " + width);
+                var roomPart = new Rectangle(width, height, origin);
+
+                //var roomPart = new Rectangle(7, 10, new Point(15, 11));
+                //var roomPart1 = new Rectangle(6, 4, new Point(4, 13));
+                //var roomPart2 = new Rectangle(18, 6, new Point(6, 9));
+
+                foreach (var line in roomPart.Lines)
                 {
-                    foreach (var overlappingLine in overlappingLines)
-                    {
-                        points.Add(overlappingLine.PointA);
-                        points.Add(overlappingLine.PointB);
-                    }
-
-                    points = points.OrderBy(p => p.y).ToList();
-
-                    linesToRemove.AddRange(overlappingLines);
-                    linesToAdd.Add(new Line(points.First(), points.Last()));
+                    points.Add(line.PointA);
+                    points.Add(line.PointB);
                 }
+                //foreach (var line in roomPart1.Lines)
+                //{
+                //    points.Add(line.PointA);
+                //    points.Add(line.PointB);
+                //}
+                //foreach (var line in roomPart2.Lines)
+                //{
+                //    points.Add(line.PointA);
+                //    points.Add(line.PointB);
+                //}
+
+                lineTable.AddRange(roomPart.Lines);
+                //lineTable.AddRange(roomPart1.Lines);
+                //lineTable.AddRange(roomPart2.Lines);
+            }
+
+
+            List<Point> crossPoints;
+
+
+
+            GetCrossingLines(lineTable, out crossPoints);
+            DrawLine(lineTable, redBlock);
+            //points.AddRange(lineTable.DistinctBy(l => l.PointA).Select(l => l.PointA).ToList());
+            points = crossPoints.Distinct().ToList();
+            var orderedPoints = CreateOutline(points);
+            DrawPoints(orderedPoints);
+            // StartCoroutine(DrawPoints(orderedPoints));
+            lineTable = ConnectLines(orderedPoints);
+
+
+            //StartCoroutine(DrawPoints(orderedPoints));
+            DrawLine(lineTable, blueBlock);
+            Debug.Log("Done.");
+        }
+    }
+
+    private List<Line> ConnectLines(List<Point> orderedPoints)
+    {
+
+        var line = new List<Line>();
+
+        for (int i = 0; i < orderedPoints.Count - 1; i++)
+        {
+            line.Add(new Line(orderedPoints[i], orderedPoints[i + 1]));
+        }
+
+        return line;
+
+    }
+
+    private List<Point> CreateOutline(List<Point> points)
+    {
+        List<Point> orderedPoints = new List<Point>();
+
+
+        //Point leftUpperCorner = points.FirstOrDefault(p => p.x == points.Min(p => p.x) && p.y == points.Where(p => p.x == points.Min(p => p.x)).Max(p => p.y));
+        //Point rightUpperCorner = points.FirstOrDefault(p => p.x == points.Max(p => p.x) && p.y == points.Where(p => p.x == points.Max(p => p.x)).Max(p => p.y));
+        //Point leftLowerCorner = points.FirstOrDefault(p => p.y == points.Min(p => p.y) && p.x == points.Where(p => p.y == points.Min(p => p.y)).Min(p => p.x));
+        //Point rightLowerCorner = points.FirstOrDefault(p => p.x == points.Max(p => p.x) && p.y == points.Where(p => p.x == points.Max(p => p.x)).Min(p => p.y));
+
+        int xThreshHold = (points.Max(p => p.x) + points.Min(p => p.x)) / 2;
+        int yThreshHold = (points.Max(p => p.y) + points.Min(p => p.y)) / 2;
+
+
+        var point = points.FirstOrDefault(p => p.x == points.Min(p => p.x) && p.y == points.Where(p => p.x == points.Min(p => p.x)).Max(p => p.y));
+        var startPoint = point;
+        orderedPoints.Add(point);
+        Point nextPoint;
+
+        int i = 0;
+        do
+        {
+            i++;
+            Debug.Log(i);
+            if (point.x <= xThreshHold && point.y >= yThreshHold)
+            {
+                Point tempPoint = new(0, 0);
+                if (point.TryGetNextPointLeft(points, out nextPoint))
+                {
+                    if (!orderedPoints.Contains(nextPoint))
+                    {
+                        tempPoint = nextPoint;
+                    }
+                }
+                if (point.TryGetNextPointDown(points, out nextPoint))
+                {
+                    if (!orderedPoints.Contains(nextPoint))
+                    {
+                        tempPoint = nextPoint;
+                    }
+                }
+                if (point.TryGetNextPointRight(points, out nextPoint))
+                {
+                    if (!orderedPoints.Contains(nextPoint))
+                    {
+                        tempPoint = nextPoint;
+                    }
+                }
+                if (point.TryGetNextPointUp(points, out nextPoint))
+                {
+                    if (!orderedPoints.Contains(nextPoint))
+                    {
+                        tempPoint = nextPoint;
+                    }
+                }
+                point = tempPoint;
+                orderedPoints.Add(point);
+            }
+            else if (point.x >= xThreshHold && point.y >= yThreshHold)
+            {
+                Point tempPoint = new(0, 0);
+                if (point.TryGetNextPointLeft(points, out nextPoint))
+                {
+                    if (!orderedPoints.Contains(nextPoint))
+                    {
+                        tempPoint = nextPoint;
+                    }
+                }
+                if (point.TryGetNextPointDown(points, out nextPoint))
+                {
+                    if (!orderedPoints.Contains(nextPoint))
+                    {
+                        tempPoint = nextPoint;
+                    }
+                }
+                if (point.TryGetNextPointRight(points, out nextPoint))
+                {
+                    if (!orderedPoints.Contains(nextPoint))
+                    {
+                        tempPoint = nextPoint;
+                    }
+                }
+                if (point.TryGetNextPointUp(points, out nextPoint))
+                {
+                    if (!orderedPoints.Contains(nextPoint))
+                    {
+                        tempPoint = nextPoint;
+                    }
+                }
+                point = tempPoint;
+                orderedPoints.Add(point);
+            }
+            else if (point.x >= xThreshHold && point.y <= yThreshHold)
+            {
+                Point tempPoint = new(0, 0);
+
+                if (point.TryGetNextPointUp(points, out nextPoint))
+                {
+                    if (!orderedPoints.Contains(nextPoint))
+                    {
+                        tempPoint = nextPoint;
+                    }
+                }
+                if (point.TryGetNextPointLeft(points, out nextPoint))
+                {
+                    if (!orderedPoints.Contains(nextPoint))
+                    {
+                        tempPoint = nextPoint;
+                    }
+                }
+                if (point.TryGetNextPointDown(points, out nextPoint))
+                {
+                    if (!orderedPoints.Contains(nextPoint))
+                    {
+                        tempPoint = nextPoint;
+                    }
+                }
+                if (point.TryGetNextPointRight(points, out nextPoint))
+                {
+                    if (!orderedPoints.Contains(nextPoint))
+                    {
+                        tempPoint = nextPoint;
+                    }
+                }
+
+                point = tempPoint;
+                orderedPoints.Add(point);
+
+            }
+            else if (point.x <= xThreshHold && point.y <= yThreshHold)
+            {
+                var tempPoint = new Point(0,0);
+                if (point.TryGetNextPointRight(points, out nextPoint))
+                {
+                    if (!orderedPoints.Contains(nextPoint) || nextPoint == startPoint)
+                    {
+                        tempPoint = nextPoint;
+                    }
+                }
+                if (point.TryGetNextPointUp(points, out nextPoint))
+                {
+                    if (!orderedPoints.Contains(nextPoint) || nextPoint == startPoint)
+                    {
+                        tempPoint = nextPoint;
+                    }
+                }
+                if (point.TryGetNextPointLeft(points, out nextPoint))
+                {
+                    if (!orderedPoints.Contains(nextPoint) || nextPoint == startPoint)
+                    {
+                        tempPoint = nextPoint;
+                    }
+                }
+                if (point.TryGetNextPointDown(points, out nextPoint))
+                {
+                    if (!orderedPoints.Contains(nextPoint) || nextPoint == startPoint)
+                    {
+                        tempPoint = nextPoint;
+                    }
+                }
+
+                point = tempPoint;
+                orderedPoints.Add(point);
+
             }
             else
             {
-                var overlappingLines = parallelLines.Where(l => l.PointA.x == line.PointA.x).ToList();
-                if (overlappingLines.Count > 1)
-                {
-                    foreach (var overlappingLine in overlappingLines)
-                    {
-                        points.Add(overlappingLine.PointA);
-                        points.Add(overlappingLine.PointB);
-                    }
-
-                    points = points.OrderBy(p => p.y).ToList();
-
-                    linesToRemove.AddRange(overlappingLines);
-                    linesToAdd.Add(new Line(points.First(), points.Last()));
-                }
+                Debug.Log("Error amana");
             }
-        }
 
-        foreach (var lineToRemove in linesToRemove)
-        {
-            lineTable.Remove(lineToRemove);
-        }
+        } while (point != startPoint && i < 200);
 
-        lineTable.AddRange(linesToAdd);
+        orderedPoints.Add(startPoint);
 
+        #region old_try
+        //// ----
 
-        StartCoroutine(DrawLine(lineTable, redBlock));
-        Debug.Log("Done.");
+        //i = 0;
+        //do
+        //{
+        //    i++;
+        //    if (point.TryGetNextPointRight(points, out nextPoint))
+        //    {
+        //        if (!orderedPoints.Contains(nextPoint))
+        //        {
+        //            point = nextPoint;
+        //            orderedPoints.Add(point);
+        //        }
+        //    }
+        //    else if (point.TryGetNextPointDown(points, out nextPoint))
+        //    {
+        //        if (!orderedPoints.Contains(nextPoint))
+        //        {
+        //            point = nextPoint;
+        //            orderedPoints.Add(point);
+        //        }
+        //    }
+        //    else if (point.TryGetNextPointLeft(points, out nextPoint))
+        //    {
+        //        if (!orderedPoints.Contains(nextPoint))
+        //        {
+        //            point = nextPoint;
+        //            orderedPoints.Add(point);
+        //        }
+        //    }
+        //    else if (point.TryGetNextPointUp(points, out nextPoint))
+        //    {
+        //        if (!orderedPoints.Contains(nextPoint))
+        //        {
+        //            point = nextPoint;
+        //            orderedPoints.Add(point);
+        //        }
+        //    }
+        //    else
+        //    {
+        //        Debug.Log("Error amana");
+        //    }
+
+        //} while (point != rightLowerCorner && i < 200);
+
+        //// ----
+
+        //i = 0;
+        //do
+        //{
+        //    i++;
+        //    if (point.TryGetNextPointDown(points, out nextPoint))
+        //    {
+        //        if (!orderedPoints.Contains(nextPoint))
+        //        {
+        //            point = nextPoint;
+        //            orderedPoints.Add(point);
+        //        }
+        //    }
+        //    else if (point.TryGetNextPointLeft(points, out nextPoint))
+        //    {
+        //        if (!orderedPoints.Contains(nextPoint))
+        //        {
+        //            point = nextPoint;
+        //            orderedPoints.Add(point);
+        //        }
+        //    }
+        //    else if (point.TryGetNextPointUp(points, out nextPoint))
+        //    {
+        //        if (!orderedPoints.Contains(nextPoint))
+        //        {
+        //            point = nextPoint;
+        //            orderedPoints.Add(point);
+        //        }
+        //    }
+        //    else if (point.TryGetNextPointRight(points, out nextPoint))
+        //    {
+        //        if (!orderedPoints.Contains(nextPoint))
+        //        {
+        //            point = nextPoint;
+        //            orderedPoints.Add(point);
+        //        }
+        //    }
+        //    else
+        //    {
+        //        Debug.Log("Error amana");
+        //    }
+
+        //} while (point != leftLowerCorner && i < 200);
+
+        //// ----
+
+        //i = 0;
+        //while (point != leftUpperCorner && i < 200)
+        //{
+        //    i++;
+        //    if (point.TryGetNextPointLeft(points, out nextPoint))
+        //    {
+        //        if (!orderedPoints.Contains(nextPoint))
+        //        {
+        //            point = nextPoint;
+        //            orderedPoints.Add(point);
+        //        }
+        //    }
+        //    else if (point.TryGetNextPointUp(points, out nextPoint))
+        //    {
+        //        if (!orderedPoints.Contains(nextPoint))
+        //        {
+        //            point = nextPoint;
+        //            orderedPoints.Add(point);
+        //        }
+        //    }
+        //    else if (point.TryGetNextPointRight(points, out nextPoint))
+        //    {
+        //        if (!orderedPoints.Contains(nextPoint))
+        //        {
+        //            point = nextPoint;
+        //            orderedPoints.Add(point);
+        //        }
+        //    }
+        //    else if (point.TryGetNextPointDown(points, out nextPoint))
+        //    {
+        //        if (!orderedPoints.Contains(nextPoint))
+        //        {
+        //            point = nextPoint;
+        //            orderedPoints.Add(point);
+        //        }
+        //    }
+        //    else
+        //    {
+        //        Debug.Log("Error amana");
+        //    }
+        //}
+        //orderedPoints.Insert(0, leftUpperCorner);
+        #endregion
+
+        return orderedPoints;
     }
 
-    private void SimplifyForm(List<Line> lineTable)
-    {
 
-        List<Line> linesToRemove = new List<Line>();
-        List<Line> linesToAdd = new List<Line>();
-
-        var vertLines = lineTable.Where(l => l.IsVertical);
-        foreach (var line in vertLines)
-        {
-            var linesWithSamePoint = vertLines.Where(l => l.Contains(line.PointA)).ToList();
-            if (linesWithSamePoint.Count() > 1)
-            {
-
-                List<Vector2> points = new List<Vector2>();
-                foreach (var lineWithSamePoint in linesWithSamePoint)
-                {
-                    points.Add(lineWithSamePoint.PointA);
-                    points.Add(lineWithSamePoint.PointB);
-                }
-
-                points = points.OrderBy(p => p.y).ToList();
-                linesToAdd.Add(new Line(points.First(), points.Last()));
-
-                linesToRemove.AddRange(linesWithSamePoint);
-            }
-
-            linesWithSamePoint = vertLines.Where(l => l.Contains(line.PointB)).ToList();
-            if (linesWithSamePoint.Count() > 1)
-            {
-
-                List<Vector2> points = new List<Vector2>();
-                foreach (var lineWithSamePoint in linesWithSamePoint)
-                {
-                    points.Add(lineWithSamePoint.PointA);
-                    points.Add(lineWithSamePoint.PointB);
-                }
-
-                points = points.OrderBy(p => p.y).ToList();
-                linesToAdd.Add(new Line(points.First(), points.Last()));
-
-
-                linesToRemove.AddRange(linesWithSamePoint);
-            }
-        }
-
-        var horizontalLines = lineTable.Where(l => l.IsHorizonal);
-        foreach (var line in horizontalLines)
-        {
-            var linesWithSamePoint = horizontalLines.Where(l => l.Contains(line.PointA)).ToList();
-            if (linesWithSamePoint.Count() > 1)
-            {
-
-                List<Vector2> points = new List<Vector2>();
-                foreach (var lineWithSamePoint in linesWithSamePoint)
-                {
-                    points.Add(lineWithSamePoint.PointA);
-                    points.Add(lineWithSamePoint.PointB);
-                }
-
-                points = points.OrderBy(p => p.x).ToList();
-                linesToAdd.Add(new Line(points.First(), points.Last()));
-
-                linesToRemove.AddRange(linesWithSamePoint);
-            }
-
-            linesWithSamePoint = horizontalLines.Where(l => l.Contains(line.PointB)).ToList();
-            if (linesWithSamePoint.Count() > 1)
-            {
-
-                List<Vector2> points = new List<Vector2>();
-                foreach (var lineWithSamePoint in linesWithSamePoint)
-                {
-                    points.Add(lineWithSamePoint.PointA);
-                    points.Add(lineWithSamePoint.PointB);
-                }
-
-                points = points.OrderBy(p => p.x).ToList();
-                linesToAdd.Add(new Line(points.First(), points.Last()));
-
-
-                linesToRemove.AddRange(linesWithSamePoint);
-            }
-        }
-
-        foreach (var lineToRemove in linesToRemove)
-        {
-            lineTable.Remove(lineToRemove);
-        }
-
-        lineTable.AddRange(linesToAdd);
-
-    }
-
-    private void RemoveDuplicates(List<Line> lineTable)
-    {
-        for (int i = 0; i < lineTable.Count; i++)
-        {
-            if (lineTable.Count(l => l.Equals(lineTable[i])) > 1)
-            {
-                lineTable.RemoveAt(i);
-            }
-        }
-    }
-
-    private void EliminateInnerPoints(List<Line> lineTable)
-    {
-
-        List<Vector2> points = new List<Vector2>();
-
-        foreach (var line in lineTable)
-        {
-            points.Add(line.PointA);
-            points.Add(line.PointB);
-        }
-
-        foreach (var point in points)
-        {
-
-            bool lowerRightPoint = points.Where(p => p.x > point.x && p.y > point.y).Any();
-            bool uppperRightPoint = points.Where(p => p.x > point.x && p.y < point.y).Any();
-            bool lowerLeftPoint = points.Where(p => p.x < point.x && p.y > point.y).Any();
-            bool upperLeftPoint = points.Where(p => p.x < point.x && p.y > point.y).Any();
-
-            if (lowerLeftPoint && lowerRightPoint && upperLeftPoint && uppperRightPoint)
-            {
-
-                var linesWithPoint = lineTable.Where(p => p.PointA == point || p.PointB == point).ToList();
-                foreach (var lwp in linesWithPoint)
-                {
-                    lineTable.Remove(lwp);
-                }
-            }
-        }
-    }
-
-    private List<Line> GetCrossingLines(List<Line> lineTable, out List<Vector2> crossPoints)
+    private List<Line> GetCrossingLines(List<Line> lineTable, out List<Point> crossPoints)
     {
         var horizontalLines = lineTable.Where(l => l.IsHorizonal).ToList();
         var verticalLines = lineTable.Where(l => l.IsVertical).ToList();
 
         var newLineTable = lineTable;
-        var crossingPoints = new List<Vector2>();
+        var crossingPoints = new List<Point>();
 
         foreach (var line in verticalLines)
         {
@@ -397,22 +567,10 @@ public class RoomGenerator : MonoBehaviour
                 var lowerYPos = Mathf.Min(line.PointA.y, line.PointB.y);
                 var upperYPos = Mathf.Max(line.PointA.y, line.PointB.y);
 
-                if (line.PointA.x > lowerLimit && lowerYPos < horizontalLine.PointA.y && upperYPos > horizontalLine.PointA.y)
+                if (line.PointA.x >= lowerLimit && line.PointA.x <= upperLimit && lowerYPos <= horizontalLine.PointA.y && upperYPos >= horizontalLine.PointA.y)
                 {
-                    var crossingPoint = new Vector2(line.PointA.x, horizontalLine.PointA.y);
+                    var crossingPoint = new Point(line.PointA.x, horizontalLine.PointA.y);
                     crossingPoints.Add(crossingPoint);
-                    List<Line> splitLines = new List<Line>()
-                        {
-                            new Line(line.PointA, crossingPoint),
-                            new Line(crossingPoint, line.PointB),
-                            new Line(horizontalLine.PointA, crossingPoint),
-                            new Line(crossingPoint, horizontalLine.PointB)
-                        };
-
-                    newLineTable.Remove(line);
-                    newLineTable.Remove(horizontalLine);
-
-                    newLineTable.AddRange(splitLines);
                 }
             }
         }
@@ -424,44 +582,11 @@ public class RoomGenerator : MonoBehaviour
 
 
 
-    private List<Line> RemoveLine(Line lineA, Line lineB)
+
+
+    public void DrawLine(List<Line> lineTable, GameObject drawBlock)
     {
-
-        List<Vector2> points = new List<Vector2>();
-
-        points.Add(lineA.PointA);
-        points.Add(lineA.PointB);
-        points.Add(lineB.PointA);
-        points.Add(lineB.PointB);
-
-        if (lineA.IsHorizonal)
-        {
-            points = points.OrderBy(p => p.x).ToList();
-        }
-        else if (lineA.IsVertical)
-        {
-            points = points.OrderBy(p => p.y).ToList();
-        }
-
-        List<Line> lines = new List<Line>
-        {
-            new Line(points[0], points[3]),
-            //new Line(points[2], points[3])
-        };
-        return lines;
-
-    }
-
-    private void DrawRectangle(Vector2 pointA, Vector2 pointB, GameObject drawBlock)
-    {
-
-        // StartCoroutine(DrawLine(pointA, pointB, drawBlock));
-
-    }
-
-    IEnumerator DrawLine(List<Line> lineTable, GameObject drawBlock)
-    {
-        int i = 0;
+        layer += 2;
         foreach (var line in lineTable)
         {
 
@@ -469,20 +594,42 @@ public class RoomGenerator : MonoBehaviour
             int verticalDiff = (int)MathF.Abs(line.PointA.y - line.PointB.y);
 
 
-            int startX = (int)Mathf.Min(line.PointA.x, line.PointB.x);
-            int startY = (int)Mathf.Min(line.PointA.y, line.PointB.y);
-            yield return new WaitForSeconds(1f);
-            Debug.Log(i++);
+            int startX = Mathf.Min(line.PointA.x, line.PointB.x);
+            int startY = Mathf.Min(line.PointA.y, line.PointB.y);
             for (int y = startY; y <= startY + verticalDiff; y++)
             {
                 for (int x = startX; x <= startX + horitonzalDiff; x++)
                 {
                     int index = x + y * dimensions;
                     //Destroy(grid[index]);
-                    grid[index] = Instantiate(drawBlock, new Vector3(x, y, i), Quaternion.identity);
+                    grid[index] = Instantiate(drawBlock, new Vector3(x, y, -layer), Quaternion.identity);
                 }
             }
         }
     }
 
+
+    IEnumerator DrawPoints(List<Vector2> points)
+    {
+        int i = 0;
+        foreach (var point in points)
+        {
+            Debug.Log(i++);
+            int index = (int)point.x + (int)point.y * dimensions;
+            grid[index] = Instantiate(redBlock, new Vector3(point.x, point.y, -i), Quaternion.identity);
+
+            yield return new WaitForSeconds(1f);
+        }
+    }
+
+    public void DrawPoints(List<Point> points)
+    {
+        foreach (var point in points)
+        {
+            int index = point.x + point.y * dimensions;
+            grid[index] = Instantiate(blueBlock, new Vector2(point.x, point.y), Quaternion.identity);
+        }
+    }
 }
+
+
