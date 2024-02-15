@@ -9,7 +9,7 @@ public class Validator : MonoBehaviour
 
     public bool IsValid;
 
-    public int framesTillValid { get; private set; } = 20;
+    public int framesTillValid { get; private set; } = 5;
 
     IEnumerator coroutine;
 
