@@ -10,9 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 047b3d30ad7a0324dbeee9aa9827cc26, type: 3}
-  m_Name: Pilar
+  m_Name: Table
   m_EditorClassIdentifier: 
-  prefab: {fileID: 1762929030149026, guid: 49a580136d5e094439eedd863c6e1855, type: 3}
-  area: {x: 0, y: 0}
+  prefab: {fileID: 3885630753897521796, guid: a3ec086b20b8bd6498d7acee8c18e461, type: 3}
   zone: 0
-  chances: 0

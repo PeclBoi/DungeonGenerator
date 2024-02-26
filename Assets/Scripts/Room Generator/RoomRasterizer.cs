@@ -10,8 +10,6 @@ public class RoomRasterizer : MonoBehaviour
 
     public int rasterSize;
 
-    public GameObject point;
-
     public float SpaceX { get { return _spaceX; } private set { _spaceX = value; } }
     public float SpaceY { get { return _spaceX; } private set { _spaceY = value; } }
 
@@ -33,7 +31,6 @@ public class RoomRasterizer : MonoBehaviour
     {
         _collider = GetComponent<Collider>();
 
-        startPos = new Vector2(_collider.bounds.min.x, _collider.bounds.min.z);
 
         _tileWidth = _collider.bounds.max.x - _collider.bounds.min.x;
         _tileHeight = _collider.bounds.max.x - _collider.bounds.min.x;
@@ -52,6 +49,8 @@ public class RoomRasterizer : MonoBehaviour
 
     public List<Cell> Rasterize()
     {
+        startPos = new Vector2(_collider.bounds.min.x, _collider.bounds.min.z);
+
         yOffset = _spaceY / 2;
         while (yOffset <= _tileHeight)
         {
@@ -59,13 +58,7 @@ public class RoomRasterizer : MonoBehaviour
             while (xOffset <= _tileWidth)
             {
                 var pos = new Vector3(startPos.x + xOffset, transform.position.y, startPos.y + yOffset);
-
-                var marker = Instantiate(point, pos, Quaternion.identity);
-                var cell = marker.AddComponent<Cell>();
-                /*new Cell(marker.transform.position, CellTag.Inside, CellSideTag.None);*/
-                cell.position = pos;
-                cell.zone = CellTag.Inside;
-                cell.side = CellSideTag.None;
+                var cell = new Cell(pos, CellTag.Inside, transform.rotation);
                 cell.Size = new Vector2(_spaceX, _spaceY);
 
                 cells.Add(cell);
@@ -75,7 +68,6 @@ public class RoomRasterizer : MonoBehaviour
         }
 
         return cells;
-
     }
 
     void RemoveOverlappedCells()

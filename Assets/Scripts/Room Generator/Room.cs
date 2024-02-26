@@ -1,8 +1,7 @@
 using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
-using UnityEditor.Overlays;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class Room : MonoBehaviour
 {
@@ -15,41 +14,74 @@ public class Room : MonoBehaviour
     public Validator validator;
     public bool IsSpawned;
 
-    public RoomPlacer placer;
+    public Transform keyPos;
+
+    public GameObject NPC;
+
+    private RoomPlacer placer;
+
+    public RoomContentPlacer roomContentPlacer;
 
     public int currentStep;
+
+    public IEnumerator coroutine;
+
+    public static System.Action<Room> OnRegisterRoom;
+
 
     private void Start()
     {
         placer = GameObject.Find("RoomPlacer").GetComponent<RoomPlacer>();
+        coroutine = AddAdjecentRooms();
+    }
+
+
+
+    public void FillRoomWithAssets()
+    {
+        StartCoroutine(FillInteriour());
+    }
+
+
+    public void PlaceNPCsInRoom()
+    {
+        StartCoroutine(PlaceNPCs());
+    }
+
+
+    private IEnumerator FillInteriour()
+    {
+        yield return new WaitUntil(() => validator.IsValid);
+        roomContentPlacer?.PlaceAssets();
+    }
+
+    private IEnumerator PlaceNPCs()
+    {
+        yield return new WaitUntil(() => validator.IsValid);
+        roomContentPlacer?.PlaceNPCs();
     }
 
     public void Update()
     {
         if (IsSpawned) { return; }
+        if (!placer.ready) { return; }
 
-        if (currentStep > 0 && placer.ready)
-        {
-            StartCoroutine(AddAdjecentRooms());
-            IsSpawned = true;
-        }
-
+        StartCoroutine(coroutine);
+        IsSpawned = true;
     }
 
-    public IEnumerator CloseOffUnconnectedRooms()
+    public void CloseOffUnconnectedRooms()
     {
-        yield return new WaitUntil(() => validator.IsValid);
-
-        foreach (var door in doors.Where(d => !d.IsConnected))
+        foreach (var door in doors.Where(d => !d.IsConnected()))
         {
             PlaceWallAtDoor(Wall, door);
-            door.IsConnected = true;
+            door.IsWall = true;
         }
     }
 
     public Door GetRandomDoor()
     {
-        var openDoors = doors.Where(d => !d.IsConnected).ToList();
+        var openDoors = doors.Where(d => !d.IsConnected()).ToList();
 
         if (!openDoors.Any()) { return null; }
 
@@ -81,8 +113,7 @@ public class Room : MonoBehaviour
         placer.ready = false;
         yield return new WaitUntil(() => validator.IsValid);
 
-
-        foreach (var door in doors.Where(d => !d.IsConnected))
+        foreach (var door in doors.Where(d => !d.IsConnected()))
         {
             Room room;
             Door otherDoor = null;
@@ -104,18 +135,10 @@ public class Room : MonoBehaviour
                 if (room.validator.IsValid)
                 {
                     room.currentStep = currentStep - 1;
-
-                    if (room.currentStep == 0)
-                    {
-                        StartCoroutine(room.CloseOffUnconnectedRooms());
-                    }
-
+                    OnRegisterRoom?.Invoke(room);
                 }
 
             } while (!room.validator.IsValid);
-
-            otherDoor.IsConnected = true;
-            door.IsConnected = true;
         }
 
         placer.ready = true;
@@ -123,10 +146,27 @@ public class Room : MonoBehaviour
 
     private void PlaceWallAtDoor(GameObject wall, Door door)
     {
+        if (door == null) return;
+
         wall = Instantiate(wall, door.transform.position, door.transform.rotation);
         wall.transform.SetParent(door.transform.parent);
 
         door.gameObject.SetActive(false);
+    }
 
+    public void ChangeToEndRoom()
+    {
+        ChangeRoomAssets();
+        PlaceKey();
+    }
+
+    private void ChangeRoomAssets()
+    {
+    }
+
+    private void PlaceKey()
+    {
+        var obj = Instantiate(placer.KeyPrefab);
+        obj.transform.position = keyPos.position;
     }
 }

@@ -19,10 +19,18 @@ public class DisableWhenStuck : MonoBehaviour
             return;
         }
 
-        var otherObject = Physics.OverlapSphere(transform.GetComponent<Renderer>().bounds.center, 0.1f, mask).FirstOrDefault(c => c.gameObject != gameObject);
+        var renderer = transform.GetComponent<Renderer>();
+
+        if(renderer == null)
+        {
+            renderer = transform.GetComponentInChildren<Renderer>();
+        }
+
+        var otherObject = Physics.OverlapSphere(renderer.bounds.center, 0.1f, mask).FirstOrDefault(c => c.gameObject != gameObject);
         if (otherObject != null)
         {
-            Destroy(gameObject);
+            //Destroy(gameObject);
+            gameObject.SetActive(false);
         }
     }
 

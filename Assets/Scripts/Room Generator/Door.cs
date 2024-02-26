@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using static UnityEditor.Experimental.GraphView.GraphView;
 
 public enum DoorOrientation
 {
@@ -13,13 +14,18 @@ public enum DoorOrientation
 public class Door : MonoBehaviour
 {
 
-    public LayerMask mask;
-
     public List<GameObject> possibleRooms;
 
-    public bool IsConnected;
+    public bool IsWall;
+
+    public LayerMask floorLayer;
 
     [SerializeField] private DoorOrientation orientation;
+
+    private void Start()
+    {
+        floorLayer = (1 << 7);
+    }
 
     public Room GetRoom()
     {
@@ -41,6 +47,14 @@ public class Door : MonoBehaviour
             return GetDirectionVector();
         }
     }
+
+
+    public bool IsConnected()
+    {
+        return Physics.Raycast(transform.position + transform.forward * 0.7f + transform.up * 0.7f, -Vector3.up, 4, floorLayer);
+    }
+
+
 
     private Vector2 GetDirectionVector()
     {

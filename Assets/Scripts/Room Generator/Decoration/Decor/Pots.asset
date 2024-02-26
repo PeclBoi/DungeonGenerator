@@ -1,0 +1,16 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 047b3d30ad7a0324dbeee9aa9827cc26, type: 3}
+  m_Name: Pots
+  m_EditorClassIdentifier: 
+  prefab: {fileID: 3526583834877864495, guid: c567032e05bc18d45a0f2b2fc91396c6, type: 3}
+  zone: 0

@@ -56,7 +56,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 769250983520725891}
-  m_Layer: 0
+  - component: {fileID: 1631080202393949379}
+  m_Layer: 7
   m_Name: Floor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -91,6 +92,68 @@ Transform:
   - {fileID: 2287752432112203707}
   - {fileID: 1123910794412099111}
   - {fileID: 439014975424593543}
+  m_Father: {fileID: 7773580436675164923}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1631080202393949379
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 806756967584069634}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 06bbaaca5f7a45348b650cfd68f2c415, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  room: {fileID: 0}
+  roomContent: {fileID: 11400000, guid: d84487d99524d3b4aa40f4b7550202ee, type: 2}
+  rasterizers:
+  - {fileID: 1727019094681482892}
+  - {fileID: 4821264112979177362}
+  - {fileID: 2071232762703606573}
+  - {fileID: 6604464766309910710}
+  - {fileID: 8761097936698759994}
+  - {fileID: 4861836885697240283}
+  - {fileID: 3062858297818154908}
+  - {fileID: 8198661251734884806}
+  - {fileID: 7467145109869022076}
+  - {fileID: 7724315248686214291}
+  - {fileID: 5771216807285193559}
+  - {fileID: 1102098284652187995}
+  - {fileID: 479535073534292930}
+  - {fileID: 1621562794671751774}
+  - {fileID: 2238198751033113342}
+  DrawGizmos: 0
+--- !u!1 &1462676867023567304
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2082478535610702092}
+  m_Layer: 0
+  m_Name: KeyPos
+  m_TagString: Untagged
+  m_Icon: {fileID: 2974397684917235467, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2082478535610702092
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1462676867023567304}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 7.86, y: 3, z: -19.099}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
   m_Father: {fileID: 7773580436675164923}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4633835124598408617
@@ -138,7 +201,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c211895de91ca9459f098a5dd5ab96a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Name: Test
+  room: {fileID: 370850015983062189}
   IsValid: 0
   _isStateSet: 0
 --- !u!1 &5646571183090312594
@@ -233,7 +296,7 @@ GameObject:
   - component: {fileID: 5701414141739170095}
   - component: {fileID: 4811705447991469113}
   - component: {fileID: 395642028429203363}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: ValidationTrigger
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -346,6 +409,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 2082478535610702092}
   - {fileID: 6748014609103492138}
   - {fileID: 769250983520725891}
   - {fileID: 7536393042712047202}
@@ -371,6 +435,10 @@ MonoBehaviour:
   Wall: {fileID: 7258465181545699838, guid: 38c6a9d4272460b45ae80951cbb0e0b2, type: 3}
   validator: {fileID: 6944755803174372249}
   IsSpawned: 0
+  keyPos: {fileID: 2082478535610702092}
+  NPC: {fileID: 5910786395727613641, guid: a77efc1d62891174dbfe0d630dd3dca4, type: 3}
+  roomContentPlacer: {fileID: 1631080202393949379}
+  currentStep: 0
 --- !u!1001 &256348616948291476
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -449,6 +517,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Bld_Castle_Floor_Stone_01 (6)
       objectReference: {fileID: 0}
+    - target: {fileID: 1093191259624944, guid: 32ea7ec0924eccb4688c22639285aed1, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 4687036833684834, guid: 32ea7ec0924eccb4688c22639285aed1, type: 3}
       propertyPath: m_LocalPosition.x
       value: 1.4513636
@@ -499,6 +571,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4687036833684834, guid: 32ea7ec0924eccb4688c22639285aed1, type: 3}
   m_PrefabInstance: {fileID: 411733844791880246}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &2071232762703606573 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1803897230794037531, guid: 32ea7ec0924eccb4688c22639285aed1, type: 3}
+  m_PrefabInstance: {fileID: 411733844791880246}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4399543c0ef13174cbffa45d86bee43b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &434341308841534437
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -510,6 +593,10 @@ PrefabInstance:
     - target: {fileID: 1093191259624944, guid: 32ea7ec0924eccb4688c22639285aed1, type: 3}
       propertyPath: m_Name
       value: SM_Bld_Castle_Floor_Stone_01 (14)
+      objectReference: {fileID: 0}
+    - target: {fileID: 1093191259624944, guid: 32ea7ec0924eccb4688c22639285aed1, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 4687036833684834, guid: 32ea7ec0924eccb4688c22639285aed1, type: 3}
       propertyPath: m_LocalPosition.x
@@ -561,6 +648,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4687036833684834, guid: 32ea7ec0924eccb4688c22639285aed1, type: 3}
   m_PrefabInstance: {fileID: 434341308841534437}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &2238198751033113342 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1803897230794037531, guid: 32ea7ec0924eccb4688c22639285aed1, type: 3}
+  m_PrefabInstance: {fileID: 434341308841534437}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4399543c0ef13174cbffa45d86bee43b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &637078225381639609
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -767,6 +865,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 8091367326913877872}
     m_Modifications:
+    - target: {fileID: 4588316217048417297, guid: 048ac48d5f18aa34c8aa096a1fed6194, type: 3}
+      propertyPath: validator
+      value: 
+      objectReference: {fileID: 6944755803174372249}
     - target: {fileID: 5515746846466282092, guid: 048ac48d5f18aa34c8aa096a1fed6194, type: 3}
       propertyPath: m_Name
       value: Door 2
@@ -845,16 +947,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e24d36eff2a4224188283afcb77ef16, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mask:
-    serializedVersion: 2
-    m_Bits: 256
-  room: {fileID: 370850015983062189}
   possibleRooms:
   - {fileID: 6833998821325481644, guid: 82c6933211343f34ea22081f02da2ba1, type: 3}
   - {fileID: 6833998821325481644, guid: 446ada0301ac78f4789876210d5a6d84, type: 3}
   - {fileID: 172497450024728755, guid: d04be86b6993e4740b78d08849456166, type: 3}
-  - {fileID: 6833998821325481644, guid: 4781d166c3f54c04d937955d590bd48b, type: 3}
-  IsConnected: 0
+  IsWall: 0
+  floorLayer:
+    serializedVersion: 2
+    m_Bits: 0
   orientation: 3
 --- !u!1001 &1080617956012224407
 PrefabInstance:
@@ -867,6 +967,10 @@ PrefabInstance:
     - target: {fileID: 1093191259624944, guid: 32ea7ec0924eccb4688c22639285aed1, type: 3}
       propertyPath: m_Name
       value: SM_Bld_Castle_Floor_Stone_01
+      objectReference: {fileID: 0}
+    - target: {fileID: 1093191259624944, guid: 32ea7ec0924eccb4688c22639285aed1, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 4687036833684834, guid: 32ea7ec0924eccb4688c22639285aed1, type: 3}
       propertyPath: m_LocalPosition.x
@@ -918,6 +1022,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4687036833684834, guid: 32ea7ec0924eccb4688c22639285aed1, type: 3}
   m_PrefabInstance: {fileID: 1080617956012224407}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1727019094681482892 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1803897230794037531, guid: 32ea7ec0924eccb4688c22639285aed1, type: 3}
+  m_PrefabInstance: {fileID: 1080617956012224407}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4399543c0ef13174cbffa45d86bee43b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1119223931575491397
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -929,6 +1044,10 @@ PrefabInstance:
     - target: {fileID: 1093191259624944, guid: 32ea7ec0924eccb4688c22639285aed1, type: 3}
       propertyPath: m_Name
       value: SM_Bld_Castle_Floor_Stone_01 (11)
+      objectReference: {fileID: 0}
+    - target: {fileID: 1093191259624944, guid: 32ea7ec0924eccb4688c22639285aed1, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 4687036833684834, guid: 32ea7ec0924eccb4688c22639285aed1, type: 3}
       propertyPath: m_LocalPosition.x
@@ -980,6 +1099,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4687036833684834, guid: 32ea7ec0924eccb4688c22639285aed1, type: 3}
   m_PrefabInstance: {fileID: 1119223931575491397}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1621562794671751774 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1803897230794037531, guid: 32ea7ec0924eccb4688c22639285aed1, type: 3}
+  m_PrefabInstance: {fileID: 1119223931575491397}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4399543c0ef13174cbffa45d86bee43b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1325756093656704000
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1058,6 +1188,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Bld_Castle_Floor_Stone_01 (13)
       objectReference: {fileID: 0}
+    - target: {fileID: 1093191259624944, guid: 32ea7ec0924eccb4688c22639285aed1, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 4687036833684834, guid: 32ea7ec0924eccb4688c22639285aed1, type: 3}
       propertyPath: m_LocalPosition.x
       value: 21.309505
@@ -1103,6 +1237,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 32ea7ec0924eccb4688c22639285aed1, type: 3}
+--- !u!114 &1102098284652187995 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1803897230794037531, guid: 32ea7ec0924eccb4688c22639285aed1, type: 3}
+  m_PrefabInstance: {fileID: 1604348498961549376}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4399543c0ef13174cbffa45d86bee43b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &1608748928047355170 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4687036833684834, guid: 32ea7ec0924eccb4688c22639285aed1, type: 3}
@@ -1384,6 +1529,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Bld_Castle_Floor_Stone_01 (8)
       objectReference: {fileID: 0}
+    - target: {fileID: 1093191259624944, guid: 32ea7ec0924eccb4688c22639285aed1, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 4687036833684834, guid: 32ea7ec0924eccb4688c22639285aed1, type: 3}
       propertyPath: m_LocalPosition.x
       value: 11.450847
@@ -1429,6 +1578,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 32ea7ec0924eccb4688c22639285aed1, type: 3}
+--- !u!114 &479535073534292930 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1803897230794037531, guid: 32ea7ec0924eccb4688c22639285aed1, type: 3}
+  m_PrefabInstance: {fileID: 2283074745606875865}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4399543c0ef13174cbffa45d86bee43b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &2287752432112203707 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4687036833684834, guid: 32ea7ec0924eccb4688c22639285aed1, type: 3}
@@ -1776,6 +1936,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Bld_Castle_Floor_Stone_01 (12)
       objectReference: {fileID: 0}
+    - target: {fileID: 1093191259624944, guid: 32ea7ec0924eccb4688c22639285aed1, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 4687036833684834, guid: 32ea7ec0924eccb4688c22639285aed1, type: 3}
       propertyPath: m_LocalPosition.x
       value: 21.309505
@@ -1821,6 +1985,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 32ea7ec0924eccb4688c22639285aed1, type: 3}
+--- !u!114 &3062858297818154908 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1803897230794037531, guid: 32ea7ec0924eccb4688c22639285aed1, type: 3}
+  m_PrefabInstance: {fileID: 3713727643947179655}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4399543c0ef13174cbffa45d86bee43b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &3718118727468729317 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4687036833684834, guid: 32ea7ec0924eccb4688c22639285aed1, type: 3}
@@ -1904,6 +2079,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Bld_Castle_Floor_Stone_01 (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 1093191259624944, guid: 32ea7ec0924eccb4688c22639285aed1, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 4687036833684834, guid: 32ea7ec0924eccb4688c22639285aed1, type: 3}
       propertyPath: m_LocalPosition.x
       value: 6.4508467
@@ -1954,6 +2133,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4687036833684834, guid: 32ea7ec0924eccb4688c22639285aed1, type: 3}
   m_PrefabInstance: {fileID: 4805199308258693549}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &6604464766309910710 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1803897230794037531, guid: 32ea7ec0924eccb4688c22639285aed1, type: 3}
+  m_PrefabInstance: {fileID: 4805199308258693549}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4399543c0ef13174cbffa45d86bee43b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &4935355943784031813
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2234,6 +2424,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Bld_Castle_Floor_Stone_01 (10)
       objectReference: {fileID: 0}
+    - target: {fileID: 1093191259624944, guid: 32ea7ec0924eccb4688c22639285aed1, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 4687036833684834, guid: 32ea7ec0924eccb4688c22639285aed1, type: 3}
       propertyPath: m_LocalPosition.x
       value: 16.309505
@@ -2284,6 +2478,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4687036833684834, guid: 32ea7ec0924eccb4688c22639285aed1, type: 3}
   m_PrefabInstance: {fileID: 5269143268460159564}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &5771216807285193559 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1803897230794037531, guid: 32ea7ec0924eccb4688c22639285aed1, type: 3}
+  m_PrefabInstance: {fileID: 5269143268460159564}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4399543c0ef13174cbffa45d86bee43b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &5603412973624647399
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2424,6 +2629,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 8091367326913877872}
     m_Modifications:
+    - target: {fileID: 3547092878098318715, guid: 048ac48d5f18aa34c8aa096a1fed6194, type: 3}
+      propertyPath: m_Convex
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3547092878098318715, guid: 048ac48d5f18aa34c8aa096a1fed6194, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4588316217048417297, guid: 048ac48d5f18aa34c8aa096a1fed6194, type: 3}
+      propertyPath: validator
+      value: 
+      objectReference: {fileID: 6944755803174372249}
     - target: {fileID: 5515746846466282092, guid: 048ac48d5f18aa34c8aa096a1fed6194, type: 3}
       propertyPath: m_Name
       value: Door 1
@@ -2502,16 +2719,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e24d36eff2a4224188283afcb77ef16, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mask:
-    serializedVersion: 2
-    m_Bits: 256
-  room: {fileID: 370850015983062189}
   possibleRooms:
   - {fileID: 6833998821325481644, guid: 82c6933211343f34ea22081f02da2ba1, type: 3}
   - {fileID: 6833998821325481644, guid: 446ada0301ac78f4789876210d5a6d84, type: 3}
   - {fileID: 172497450024728755, guid: d04be86b6993e4740b78d08849456166, type: 3}
-  - {fileID: 6833998821325481644, guid: 4781d166c3f54c04d937955d590bd48b, type: 3}
-  IsConnected: 0
+  IsWall: 0
+  floorLayer:
+    serializedVersion: 2
+    m_Bits: 0
   orientation: 1
 --- !u!1001 &5997908846311988534
 PrefabInstance:
@@ -2723,6 +2938,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Bld_Castle_Floor_Stone_01 (9)
       objectReference: {fileID: 0}
+    - target: {fileID: 1093191259624944, guid: 32ea7ec0924eccb4688c22639285aed1, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 4687036833684834, guid: 32ea7ec0924eccb4688c22639285aed1, type: 3}
       propertyPath: m_LocalPosition.x
       value: 16.309505
@@ -2768,6 +2987,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 32ea7ec0924eccb4688c22639285aed1, type: 3}
+--- !u!114 &4861836885697240283 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1803897230794037531, guid: 32ea7ec0924eccb4688c22639285aed1, type: 3}
+  m_PrefabInstance: {fileID: 6516721967606400448}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4399543c0ef13174cbffa45d86bee43b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &6512392871351376034 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4687036833684834, guid: 32ea7ec0924eccb4688c22639285aed1, type: 3}
@@ -2851,6 +3081,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Bld_Castle_Floor_Stone_01 (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 1093191259624944, guid: 32ea7ec0924eccb4688c22639285aed1, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 4687036833684834, guid: 32ea7ec0924eccb4688c22639285aed1, type: 3}
       propertyPath: m_LocalPosition.x
       value: 1.4513636
@@ -2896,6 +3130,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 32ea7ec0924eccb4688c22639285aed1, type: 3}
+--- !u!114 &4821264112979177362 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1803897230794037531, guid: 32ea7ec0924eccb4688c22639285aed1, type: 3}
+  m_PrefabInstance: {fileID: 6620336343010277001}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4399543c0ef13174cbffa45d86bee43b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &6624951209343658987 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4687036833684834, guid: 32ea7ec0924eccb4688c22639285aed1, type: 3}
@@ -2979,6 +3224,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Bld_Castle_Floor_Stone_01 (4)
       objectReference: {fileID: 0}
+    - target: {fileID: 1093191259624944, guid: 32ea7ec0924eccb4688c22639285aed1, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 4687036833684834, guid: 32ea7ec0924eccb4688c22639285aed1, type: 3}
       propertyPath: m_LocalPosition.x
       value: 11.450847
@@ -3029,6 +3278,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4687036833684834, guid: 32ea7ec0924eccb4688c22639285aed1, type: 3}
   m_PrefabInstance: {fileID: 6961745745541874209}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &8761097936698759994 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1803897230794037531, guid: 32ea7ec0924eccb4688c22639285aed1, type: 3}
+  m_PrefabInstance: {fileID: 6961745745541874209}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4399543c0ef13174cbffa45d86bee43b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &7049899641872388116
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3177,6 +3437,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Bld_Castle_Floor_Stone_01 (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 1093191259624944, guid: 32ea7ec0924eccb4688c22639285aed1, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 4687036833684834, guid: 32ea7ec0924eccb4688c22639285aed1, type: 3}
       propertyPath: m_LocalPosition.x
       value: 6.4508467
@@ -3227,6 +3491,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4687036833684834, guid: 32ea7ec0924eccb4688c22639285aed1, type: 3}
   m_PrefabInstance: {fileID: 7552470608758491357}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &8198661251734884806 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1803897230794037531, guid: 32ea7ec0924eccb4688c22639285aed1, type: 3}
+  m_PrefabInstance: {fileID: 7552470608758491357}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4399543c0ef13174cbffa45d86bee43b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &7899671705123290245
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3437,6 +3712,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Bld_Castle_Floor_Stone_01 (5)
       objectReference: {fileID: 0}
+    - target: {fileID: 1093191259624944, guid: 32ea7ec0924eccb4688c22639285aed1, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 4687036833684834, guid: 32ea7ec0924eccb4688c22639285aed1, type: 3}
       propertyPath: m_LocalPosition.x
       value: 11.450847
@@ -3482,6 +3761,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 32ea7ec0924eccb4688c22639285aed1, type: 3}
+--- !u!114 &7724315248686214291 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1803897230794037531, guid: 32ea7ec0924eccb4688c22639285aed1, type: 3}
+  m_PrefabInstance: {fileID: 8231169662173918600}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4399543c0ef13174cbffa45d86bee43b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &8226488720167823594 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4687036833684834, guid: 32ea7ec0924eccb4688c22639285aed1, type: 3}
@@ -3565,6 +3855,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Bld_Castle_Floor_Stone_01 (7)
       objectReference: {fileID: 0}
+    - target: {fileID: 1093191259624944, guid: 32ea7ec0924eccb4688c22639285aed1, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 4687036833684834, guid: 32ea7ec0924eccb4688c22639285aed1, type: 3}
       propertyPath: m_LocalPosition.x
       value: 6.4508467
@@ -3610,6 +3904,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 32ea7ec0924eccb4688c22639285aed1, type: 3}
+--- !u!114 &7467145109869022076 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1803897230794037531, guid: 32ea7ec0924eccb4688c22639285aed1, type: 3}
+  m_PrefabInstance: {fileID: 9126573315463565927}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4399543c0ef13174cbffa45d86bee43b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &9131255805923200773 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4687036833684834, guid: 32ea7ec0924eccb4688c22639285aed1, type: 3}

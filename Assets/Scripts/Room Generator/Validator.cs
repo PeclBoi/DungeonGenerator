@@ -7,9 +7,10 @@ using UnityEngine;
 public class Validator : MonoBehaviour
 {
 
-    public bool IsValid;
+    public Room room;
 
-    public int framesTillValid { get; private set; } = 5;
+    public bool IsValid;
+    public int framesTillValid { get; private set; } = 10;
 
     IEnumerator coroutine;
 
@@ -39,6 +40,5 @@ public class Validator : MonoBehaviour
         }
         IsValid = true;
         _isStateSet = true;
-        Debug.Log("Valid frfr");
     }
 }
